@@ -7,11 +7,11 @@
 From the same directory as your project's package.json, install this module with the following command:
 
 ```sh
-$ npm install pown-toolchain --save
+$ npm install -g pown-toolchain
 ```
 
 Once that's done, you can invoke pown-toolchain like this:
 
 ```sh
-$ ./node_modules/.bin/pown-toolchain
+$ pown-toolchain
 ```
