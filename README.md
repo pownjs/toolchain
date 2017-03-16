@@ -15,3 +15,9 @@ Once that's done, you can invoke pown-toolchain like this:
 ```sh
 $ pown-toolchain
 ```
+
+You can also install the pown-toolchain locally like this:
+
+```sh
+$ npm install --save-dev pown-toolchain
+```
