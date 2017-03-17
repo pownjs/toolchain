@@ -17,9 +17,9 @@ exports.yargs = {
 
         const helpers = require('./helpers')
 
-        const test = (inDir, isParallel) => {
+        const test = (isParallel) => {
             const tasks = [
-                helpers.spawnModuleBin.bind(helpers, 'jest', ['spec'], {isParallel: isParallel})
+                helpers.spawnModuleBin.bind(helpers, 'jest', [], {isParallel: isParallel})
             ]
 
             if (isParallel) {
@@ -29,8 +29,6 @@ exports.yargs = {
             }
         }
 
-        const inDir = 'spec'
-
-        test(inDir, argv.parallel)
+        test(argv.parallel)
     }
 }
