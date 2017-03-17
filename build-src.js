@@ -7,7 +7,14 @@ exports.yargs = {
             alias: 'y',
             type: 'boolean',
             default: false,
-            describe: 'Say yes to everything'
+            describe: 'Yes to everything'
+        },
+
+        maps: {
+            alias: 'm',
+            type: 'boolean',
+            default: false,
+            describe: 'Produce source maps'
         },
 
         parallel: {
@@ -28,7 +35,7 @@ exports.yargs = {
         
         const helpers = require('./helpers')
 
-        const build = (inDir, outDir, shouldClean, isParallel) => {
+        const build = (shouldClean, inDir, outDir, sourceMaps, isParallel) => {
             if (shouldClean) {
                 console.log(chalk.green('*'), `cleaning ${outDir}`)
 
@@ -38,8 +45,8 @@ exports.yargs = {
             const tasks = [
                 // TODO: figure out how to discover the location bin
 
-                helpers.spawn.bind(helpers, path.join(__dirname, 'node_modules', '.bin', 'babel'), ['--copy-files', '--ignore', '*.coffee', '-x', '.js,.jsx,.es6,.es', inDir, '-d', outDir], {isParallel: isParallel}),
-                helpers.spawn.bind(helpers, path.join(__dirname, 'node_modules', '.bin', 'coffee'), ['-o', outDir, '-c', inDir], {isParallel: isParallel})
+                helpers.spawn.bind(helpers, path.join(__dirname, 'node_modules', '.bin', 'babel'), (sourceMaps ? ['-s', 'true'] : []).concat(['--copy-files', '--ignore', '*.coffee', '-x', '.js,.jsx,.es6,.es', inDir, '-d', outDir]), {isParallel: isParallel}),
+                helpers.spawn.bind(helpers, path.join(__dirname, 'node_modules', '.bin', 'coffee'), (sourceMaps ? ['-m'] : []).concat(['-o', outDir, '-c', inDir]), {isParallel: isParallel})
             ]
 
             if (isParallel) {
@@ -54,14 +61,14 @@ exports.yargs = {
 
         if (!extfs.isEmptySync(outDir)) {
             if (argv.y) {
-                build(inDir, outDir, true, argv.parallel)
+                build(true, inDir, outDir, argv.maps, argv.parallel)
             } else {
                 inquirer.prompt([{type: 'confirm', name: 'q', default: false, message: `The contents of ${outDir} will be deleted. Do you want to proceed?`}])
-                .then(r => r.q && build(inDir, outDir, true, argv.parallel))
+                .then(r => r.q && build(true, inDir, outDir, argv.maps, argv.parallel))
                 .catch(e => console.error(chalk.red('-'), e.message || e))
             }
         } else {
-            build(inDir, outDir, false, argv.parallel)
+            build(false, inDir, outDir, argv.maps, argv.parallel)
         }
     }
 }
