@@ -8,14 +8,14 @@ module.exports.spawnModuleBin = (bin, args, options, done) => {
     const binName = path.basename(bin)
     const isParallel = options.isParallel || false
 
-    findParentDir(path.join(__dirname, 'node_modules', '.bin'), bin, (err, binDir) => {
+    findParentDir(path.join(__dirname, 'node_modules'), '.bin', (err, binDir) => {
         if (err) {
             done(err)
 
             return
         }
 
-        const binPath = path.join(binDir, bin)
+        const binPath = path.join(binDir, '.bin', bin)
 
         console.log(chalk.green('*'), `${binName} started`)
 
