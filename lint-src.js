@@ -21,8 +21,10 @@ exports.yargs = {
 
         const lint = (inDir, isParallel) => {
             const tasks = [
-                helpers.spawn.bind(helpers, path.join('node_modules', '.bin', 'eslint'), ['src'], {isParallel: isParallel}),
-                helpers.spawn.bind(helpers, path.join('node_modules', '.bin', 'coffeelint'), ['src'], {isParallel: isParallel})
+                // TODO: figure out how to discover the location bin
+
+                helpers.spawn.bind(helpers, path.join(__dirname, 'node_modules', '.bin', 'eslint'), ['src'], {isParallel: isParallel}),
+                helpers.spawn.bind(helpers, path.join(__dirname, 'node_modules', '.bin', 'coffeelint'), ['src'], {isParallel: isParallel})
             ]
 
             if (isParallel) {

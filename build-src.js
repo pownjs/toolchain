@@ -36,8 +36,10 @@ exports.yargs = {
             }
 
             const tasks = [
-                helpers.spawn.bind(helpers, path.join('node_modules', '.bin', 'babel'), ['--copy-files', '--ignore', '*.coffee', '-x', '.js,.jsx,.es6,.es', inDir, '-d', outDir], {isParallel: isParallel}),
-                helpers.spawn.bind(helpers, path.join('node_modules', '.bin', 'coffee'), ['-o', outDir, '-c', inDir], {isParallel: isParallel})
+                // TODO: figure out how to discover the location bin
+
+                helpers.spawn.bind(helpers, path.join(__dirname, 'node_modules', '.bin', 'babel'), ['--copy-files', '--ignore', '*.coffee', '-x', '.js,.jsx,.es6,.es', inDir, '-d', outDir], {isParallel: isParallel}),
+                helpers.spawn.bind(helpers, path.join(__dirname, 'node_modules', '.bin', 'coffee'), ['-o', outDir, '-c', inDir], {isParallel: isParallel})
             ]
 
             if (isParallel) {

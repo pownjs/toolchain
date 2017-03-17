@@ -21,7 +21,9 @@ exports.yargs = {
 
         const test = (inDir, isParallel) => {
             const tasks = [
-                helpers.spawn.bind(helpers, path.join('node_modules', '.bin', 'jest'), ['spec'], {isParallel: isParallel})
+                // TODO: figure out how to discover the location bin
+
+                helpers.spawn.bind(helpers, path.join(__dirname, 'node_modules', '.bin', 'jest'), ['spec'], {isParallel: isParallel})
             ]
 
             if (isParallel) {
