@@ -19,7 +19,7 @@ exports.yargs = {
 
         const helpers = require('./helpers')
 
-        const build = (inDir, isParallel) => {
+        const lint = (inDir, isParallel) => {
             const tasks = [
                 helpers.spawn.bind(helpers, path.join('node_modules', '.bin', 'eslint'), ['src'], {isParallel: isParallel}),
                 helpers.spawn.bind(helpers, path.join('node_modules', '.bin', 'coffeelint'), ['src'], {isParallel: isParallel})
@@ -34,6 +34,6 @@ exports.yargs = {
 
         const inDir = 'src'
 
-        build(inDir, argv.parallel)
+        lint(inDir, argv.parallel)
     }
 }
