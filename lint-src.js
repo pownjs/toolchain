@@ -3,12 +3,37 @@ exports.yargs = {
     describe: 'Lint source (./src)',
 
     builder: {
+        parallel: {
+            alias: 'p',
+            type: 'boolean',
+            default: false,
+            describe: 'Execute in parallel'
+        }
     },
 
     handler: (argv) => {
         const path = require('path')
-        const childProcess = require('child_process')
+        const chalk = require('chalk')
+        const series = require('async/series')
+        const parallel = require('async/parallel')
 
-        childProcess.spawn(path.join('node_modules', '.bin', 'eslint'), ['src'])
+        const helpers = require('./helpers')
+
+        const build = (inDir, isParallel) => {
+            const tasks = [
+                helpers.spawn.bind(helpers, path.join('node_modules', '.bin', 'eslint'), ['src'], {isParallel: isParallel}),
+                helpers.spawn.bind(helpers, path.join('node_modules', '.bin', 'coffeelint'), ['src'], {isParallel: isParallel})
+            ]
+
+            if (isParallel) {
+                parallel(tasks, () => {})
+            } else {
+                series(tasks, () => {})
+            }
+        }
+
+        const inDir = 'src'
+
+        build(inDir, argv.parallel)
     }
 }

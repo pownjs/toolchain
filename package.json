@@ -7,7 +7,8 @@
     "pown-toolchain": "./index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build-src": "node index.js build-src",
+    "lint-src": "node index.js lint-src"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   },
   "homepage": "https://github.com/pownjs/pown-toolchain#readme",
   "dependencies": {
+    "async": "^2.1.5",
     "babel-cli": "^6.24.0",
     "babel-eslint": "^7.1.1",
     "babel-plugin-transform-class-properties": "^6.23.0",
@@ -36,7 +38,13 @@
     "babel-preset-stage-0": "^6.22.0",
     "babel-register": "^6.24.0",
     "babel-runtime": "^6.23.0",
+    "buffer-split": "^1.0.0",
+    "chalk": "^1.1.3",
+    "coffee-script": "^1.12.4",
+    "coffeelint": "^1.16.0",
     "eslint": "^3.17.1",
+    "extfs": "0.0.7",
+    "inquirer": "^3.0.6",
     "pown-cli": "^0.2.1"
   }
 }
