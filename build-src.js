@@ -26,7 +26,6 @@ exports.yargs = {
     },
 
     handler: (argv) => {
-        const path = require('path')
         const chalk = require('chalk')
         const extfs = require('extfs')
         const inquirer = require('inquirer')
@@ -43,10 +42,8 @@ exports.yargs = {
             }
 
             const tasks = [
-                // TODO: figure out how to discover the location bin
-
-                helpers.spawn.bind(helpers, path.join(__dirname, 'node_modules', '.bin', 'babel'), (sourceMaps ? ['-s', 'true'] : []).concat(['--copy-files', '--ignore', '*.coffee', '-x', '.js,.jsx,.es6,.es', inDir, '-d', outDir]), {isParallel: isParallel}),
-                helpers.spawn.bind(helpers, path.join(__dirname, 'node_modules', '.bin', 'coffee'), (sourceMaps ? ['-m'] : []).concat(['-o', outDir, '-c', inDir]), {isParallel: isParallel})
+                helpers.spawnModuleBin.bind(helpers, 'babel', (sourceMaps ? ['-s', 'true'] : []).concat(['--copy-files', '--ignore', '*.coffee', '-x', '.js,.jsx,.es6,.es', inDir, '-d', outDir]), {isParallel: isParallel}),
+                helpers.spawnModuleBin.bind(helpers, 'coffee', (sourceMaps ? ['-m'] : []).concat(['-o', outDir, '-c', inDir]), {isParallel: isParallel})
             ]
 
             if (isParallel) {

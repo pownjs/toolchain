@@ -2,14 +2,16 @@ const path = require('path')
 const chalk = require('chalk')
 const bufferSplit = require('buffer-split')
 const childProcess = require('child_process')
+const findParentDir = require('find-parent-dir')
 
-module.exports.spawn = (command, args, options, done) => {
-    const commandName = path.basename(command)
+module.exports.spawnModuleBin = (bin, args, options, done) => {
+    const binName = path.basename(bin)
+    const binPath = path.join(__dirname, 'node_modules', '.bin', bin)
     const isParallel = options.isParallel || false
 
-    console.log(chalk.green('*'), `${commandName} started`)
+    console.log(chalk.green('*'), `${binName} started`)
 
-    const p = childProcess.spawn(command, args)
+    const p = childProcess.spawn(binPath, args)
 
     let stderrDataHandler
     let stdoutDataHandler
@@ -17,13 +19,13 @@ module.exports.spawn = (command, args, options, done) => {
     if (isParallel) {
         stderrDataHandler = _ => {
             bufferSplit(_, new Buffer('\n')).forEach((line) => {
-                console.log(chalk.red(`- ${commandName}`), line.toString())
+                console.log(chalk.red(`- ${binName}`), line.toString())
             })
         }
 
         stdoutDataHandler = _ => {
             bufferSplit(_, new Buffer('\n')).forEach((line) => {
-                console.log(chalk.green(`- ${commandName}`), line.toString())
+                console.log(chalk.green(`- ${binName}`), line.toString())
             })
         }
     } else {
@@ -44,7 +46,7 @@ module.exports.spawn = (command, args, options, done) => {
     p.stdout.on('data', stdoutDataHandler)
 
     p.on('exit', _ => {
-        console.log(chalk.green('*'), `${commandName} finished`)
+        console.log(chalk.green('*'), `${binName} finished`)
 
         done()
     })

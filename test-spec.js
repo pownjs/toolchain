@@ -12,8 +12,6 @@ exports.yargs = {
     },
 
     handler: (argv) => {
-        const path = require('path')
-        const chalk = require('chalk')
         const series = require('async/series')
         const parallel = require('async/parallel')
 
@@ -21,9 +19,7 @@ exports.yargs = {
 
         const test = (inDir, isParallel) => {
             const tasks = [
-                // TODO: figure out how to discover the location bin
-
-                helpers.spawn.bind(helpers, path.join(__dirname, 'node_modules', '.bin', 'jest'), ['spec'], {isParallel: isParallel})
+                helpers.spawnModuleBin.bind(helpers, 'jest', ['spec'], {isParallel: isParallel})
             ]
 
             if (isParallel) {
