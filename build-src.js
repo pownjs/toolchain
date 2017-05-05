@@ -31,13 +31,6 @@ exports.yargs = {
             describe: 'Compile coffee'
         },
 
-        refit: {
-            alias: 'r',
-            type: 'boolean',
-            default: false,
-            describe: 'Do second pass with babel at end'
-        },
-
         parallel: {
             alias: 'p',
             type: 'boolean',
@@ -47,6 +40,8 @@ exports.yargs = {
     },
 
     handler: (argv) => {
+        const path = require('path')
+        const glob = require('glob')
         const chalk = require('chalk')
         const extfs = require('extfs')
         const inquirer = require('inquirer')
@@ -69,13 +64,28 @@ exports.yargs = {
             }
 
             if (argv.coffee) {
-                tasks.push(helpers.spawnModuleBin.bind(helpers, 'coffee', (sourceMaps ? ['-m'] : []).concat(['-o', outDir, '-c', inDir]), {isParallel: isParallel}))
+                const subTasks = []
+
+                subTasks.push(helpers.spawnModuleBin.bind(helpers, 'coffee', (sourceMaps ? ['-m'] : []).concat(['-o', outDir, '-c', inDir]), {isParallel: isParallel}))
+
+                subTasks.push((done) => {
+                    glob('*.coffee', {cwd: inDir}, (err, files) => {
+                        const subSubTasks = files.map((file) => {
+                            file = path.join(outDir, file.replace(/\.coffee$/, '.js'))
+ 
+                            // TODO: combine into a single command
+ 
+                            return helpers.spawnModuleBin.bind(helpers, 'babel', (sourceMaps ? ['-s', 'true'] : []).concat([file, '-o', file]), {isParallel: isParallel, env: Object.assign({BABEL_ENV: 'coffee'}, process.env)})
+                        })
+
+                        parallel(subSubTasks, done)
+                    })
+                })
+
+                tasks.push(series.bind(null, subTasks))
             }
 
             const finish = () => {
-                if (argv.refit) {
-                    helpers.spawnModuleBin('babel', (sourceMaps ? ['-s', 'true'] : []).concat([outDir, '-d', outDir]), {isParallel: isParallel}, () => {})
-                }
             }
 
             if (isParallel) {

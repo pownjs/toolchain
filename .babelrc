@@ -1,11 +1,25 @@
 {
-  "presets": [
-    "es2015",
-    "stage-0",
-    "react"
-  ],
-  "plugins": [
-    "transform-decorators-legacy",
-    "transform-runtime"
-  ]
+  "env": {
+    "development": {
+      "presets": [
+        "es2015",
+        "stage-0",
+        "react"
+      ],
+      "plugins": [
+        "transform-decorators-legacy",
+        "transform-runtime"
+      ]
+    },
+    "coffee": {
+      "presets": [
+      ],
+      "plugins": [
+        "babel-plugin-transform-runtime",
+        "babel-plugin-transform-regenerator",
+        "babel-plugin-transform-es2015-for-of",
+        ["babel-plugin-transform-es2015-modules-commonjs", {"allowTopLevelThis": true}]
+      ]
+    }
+  }
 }

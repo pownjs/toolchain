@@ -19,7 +19,7 @@ module.exports.spawnModuleBin = (bin, args, options, done) => {
 
         console.log(chalk.green('*'), `${binName} started`)
 
-        const p = childProcess.spawn(binPath, args)
+        const p = childProcess.spawn(binPath, args, options)
 
         let stderrDataHandler
         let stdoutDataHandler
