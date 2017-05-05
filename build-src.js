@@ -17,6 +17,20 @@ exports.yargs = {
             describe: 'Produce source maps'
         },
 
+        babel: {
+            alias: 'b',
+            type: 'boolean',
+            default: true,
+            describe: 'Compile babel'
+        },
+        
+        coffee: {
+            alias: 'c',
+            type: 'boolean',
+            default: true,
+            describe: 'Compile coffee'
+        },
+
         parallel: {
             alias: 'p',
             type: 'boolean',
@@ -41,10 +55,15 @@ exports.yargs = {
                 extfs.removeSync(outDir)
             }
 
-            const tasks = [
-                helpers.spawnModuleBin.bind(helpers, 'babel', (sourceMaps ? ['-s', 'true'] : []).concat(['--copy-files', '--ignore', '*.coffee', '-x', '.js,.jsx,.es6,.es', inDir, '-d', outDir]), {isParallel: isParallel}),
-                helpers.spawnModuleBin.bind(helpers, 'coffee', (sourceMaps ? ['-m'] : []).concat(['-o', outDir, '-c', inDir]), {isParallel: isParallel})
-            ]
+            const tasks = []
+
+            if (argv.babel) {
+                tasks.push(helpers.spawnModuleBin.bind(helpers, 'babel', (sourceMaps ? ['-s', 'true'] : []).concat(['--copy-files', '--ignore', '*.coffee', '-x', '.js,.jsx,.es6,.es', inDir, '-d', outDir]), {isParallel: isParallel}))
+            }
+
+            if (argv.coffee) {
+                tasks.push(helpers.spawnModuleBin.bind(helpers, 'coffee', (sourceMaps ? ['-m'] : []).concat(['-o', outDir, '-c', inDir]), {isParallel: isParallel}))
+            }
 
             if (isParallel) {
                 parallel(tasks, () => {})
