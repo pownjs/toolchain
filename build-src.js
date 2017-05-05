@@ -23,12 +23,19 @@ exports.yargs = {
             default: true,
             describe: 'Compile babel'
         },
-        
+
         coffee: {
             alias: 'c',
             type: 'boolean',
             default: true,
             describe: 'Compile coffee'
+        },
+
+        refit: {
+            alias: 'r',
+            type: 'boolean',
+            default: false,
+            describe: 'Do second pass with babel at end'
         },
 
         parallel: {
@@ -45,7 +52,7 @@ exports.yargs = {
         const inquirer = require('inquirer')
         const series = require('async/series')
         const parallel = require('async/parallel')
-        
+
         const helpers = require('./helpers')
 
         const build = (shouldClean, inDir, outDir, sourceMaps, isParallel) => {
@@ -65,10 +72,16 @@ exports.yargs = {
                 tasks.push(helpers.spawnModuleBin.bind(helpers, 'coffee', (sourceMaps ? ['-m'] : []).concat(['-o', outDir, '-c', inDir]), {isParallel: isParallel}))
             }
 
+            const finish = () => {
+                if (argv.refit) {
+                    helpers.spawnModuleBin('babel', (sourceMaps ? ['-s', 'true'] : []).concat([outDir, '-d', outDir]), {isParallel: isParallel}, () => {})
+                }
+            }
+
             if (isParallel) {
-                parallel(tasks, () => {})
+                parallel(tasks, finish)
             } else {
-                series(tasks, () => {})
+                series(tasks, finish)
             }
         }
 
