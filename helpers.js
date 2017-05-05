@@ -5,6 +5,8 @@ const childProcess = require('child_process')
 const findParentDir = require('find-parent-dir')
 
 module.exports.spawnModuleBin = (bin, args, options, done) => {
+    // TODO: produce better print so the user knows what is happening
+
     const binName = path.basename(bin)
     const isParallel = options.isParallel || false
 

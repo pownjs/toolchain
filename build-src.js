@@ -50,7 +50,7 @@ exports.yargs = {
 
         const helpers = require('./helpers')
 
-        const build = (shouldClean, inDir, outDir, sourceMaps, isParallel) => {
+        const build = (shouldClean, inDir, outDir, babel, coffee, sourceMaps, isParallel) => {
             if (shouldClean) {
                 console.log(chalk.green('*'), `cleaning ${outDir}`)
 
@@ -59,23 +59,24 @@ exports.yargs = {
 
             const tasks = []
 
-            if (argv.babel) {
+            if (babel) {
                 tasks.push(helpers.spawnModuleBin.bind(helpers, 'babel', (sourceMaps ? ['-s', 'true'] : []).concat(['--copy-files', '--ignore', '*.coffee', '-x', '.js,.jsx,.es6,.es', inDir, '-d', outDir]), {isParallel: isParallel}))
             }
 
-            if (argv.coffee) {
+            if (coffee) {
                 const subTasks = []
 
                 subTasks.push(helpers.spawnModuleBin.bind(helpers, 'coffee', (sourceMaps ? ['-m'] : []).concat(['-o', outDir, '-c', inDir]), {isParallel: isParallel}))
 
                 subTasks.push((done) => {
-                    glob('*.coffee', {cwd: inDir}, (err, files) => {
+                    glob('**/*.coffee', {cwd: inDir}, (err, files) => {
                         const subSubTasks = files.map((file) => {
                             file = path.join(outDir, file.replace(/\.coffee$/, '.js'))
  
                             // TODO: combine into a single command
+                            // NOTE: it does not produce source maps by design
  
-                            return helpers.spawnModuleBin.bind(helpers, 'babel', (sourceMaps ? ['-s', 'true'] : []).concat([file, '-o', file]), {isParallel: isParallel, env: Object.assign({BABEL_ENV: 'coffee'}, process.env)})
+                            return helpers.spawnModuleBin.bind(helpers, 'babel', ([]).concat([file, '-o', file]), {isParallel: isParallel, env: Object.assign({BABEL_ENV: 'coffee'}, process.env)})
                         })
 
                         parallel(subSubTasks, done)
@@ -100,14 +101,14 @@ exports.yargs = {
 
         if (!extfs.isEmptySync(outDir)) {
             if (argv.y) {
-                build(true, inDir, outDir, argv.maps, argv.parallel)
+                build(true, inDir, outDir, argv.babel, argv.coffee, argv.maps, argv.parallel)
             } else {
                 inquirer.prompt([{type: 'confirm', name: 'q', default: false, message: `The contents of ${outDir} will be deleted. Do you want to proceed?`}])
-                .then(r => r.q && build(true, inDir, outDir, argv.maps, argv.parallel))
+                .then(r => r.q && build(true, inDir, outDir, argv.babel, argv.coffee, argv.maps, argv.parallel))
                 .catch(e => console.error(chalk.red('-'), e.message || e))
             }
         } else {
-            build(false, inDir, outDir, argv.maps, argv.parallel)
+            build(false, inDir, outDir, argv.babel, argv.coffee, argv.maps, argv.parallel)
         }
     }
 }
