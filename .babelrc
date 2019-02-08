@@ -1,25 +1,27 @@
 {
-  "env": {
-    "development": {
-      "presets": [
-        "es2015",
-        "stage-0",
-        "react"
-      ],
-      "plugins": [
-        "transform-decorators-legacy",
-        "transform-runtime"
-      ]
-    },
-    "coffee": {
-      "presets": [
-      ],
-      "plugins": [
-        "babel-plugin-transform-runtime",
-        "babel-plugin-transform-regenerator",
-        "babel-plugin-transform-es2015-for-of",
-        ["babel-plugin-transform-es2015-modules-commonjs", {"allowTopLevelThis": true}]
-      ]
-    }
-  }
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": [
+            "last 2 Chrome versions",
+            "last 2 Firefox versions"
+          ],
+          "node": "8.10"
+        },
+        "useBuiltIns": "usage",
+        "shippedProposals": true
+      }
+    ],
+    "@babel/preset-typescript"
+  ],
+  "plugins": [
+    "import-css-to-jss",
+    "import-md-to-js",
+    "@babel/plugin-transform-runtime",
+    [ "@babel/plugin-proposal-decorators", { "legacy": true } ],
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread"
+  ]
 }

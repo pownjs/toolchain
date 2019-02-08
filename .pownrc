@@ -1,7 +1,0 @@
-{
-  "commands": [
-    "./build-src.js",
-    "./lint-src.js",
-    "./test-spec.js"
-  ]
-}

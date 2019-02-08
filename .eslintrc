@@ -1,3 +1,39 @@
 {
-  "parser": "babel-eslint"
+  "extends": [
+    "eslint:recommended"
+  ], 
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalDecorators": true
+    }
+  },
+  "plugins": [
+  ],
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "globals": {
+    "global": true,
+    "module": true,
+    "exports": true,
+    "require": true,
+    "process": true,
+    "Buffer": true,
+    "Promise": true,
+    "__dirname": true,
+    "__filename": true
+  },
+  "rules": {
+    "eol-last": [1, "always"],
+    "indent": [1, 4, {"SwitchCase": 1}],
+    "linebreak-style": [1, "unix"],
+    "no-redeclare": [2],
+    "no-global-assign": [2],
+    "no-undef": [2, {}],
+    "no-console": [2, {"allow": ["log", "warn", "error", "table"]}],
+    "no-unused-vars": [1, {"vars": "all", "args": "after-used", "ignoreRestSiblings": true}],
+    "react/no-find-dom-node": [1]
+  }
 }
