@@ -3,9 +3,7 @@
   "version": "2.0.0",
   "description": "Pownage guaranteed",
   "main": "lib/index.js",
-  "scripts": {
-    "test": "mocha"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pownjs/pown-toolchain.git"
