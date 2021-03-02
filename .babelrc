@@ -17,10 +17,7 @@
     "@babel/preset-typescript"
   ],
   "plugins": [
-    "import-css-to-jss",
-    "import-md-to-js",
-    "@babel/plugin-transform-runtime",
-    [ "@babel/plugin-proposal-decorators", { "legacy": true } ],
+    "@babel/plugin-transform-runtime", ["@babel/plugin-proposal-decorators", { "legacy": true }],
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-proposal-object-rest-spread"
   ]
