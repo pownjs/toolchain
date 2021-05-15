@@ -21,6 +21,7 @@
   "homepage": "https://github.com/pownjs/pown-toolchain#readme",
   "devDependencies": {},
   "dependencies": {
-    "mocha": "^8.3.0"
+    "@babel/register": "^7.13.16",
+    "mocha": "^8.4.0"
   }
 }
