@@ -11,7 +11,10 @@
           "node": "13.0.0"
         },
         "useBuiltIns": "usage",
-        "shippedProposals": true
+        "corejs": {
+          "version": "3.12",
+          "proposals": true
+        }
       }
     ]
   ],
