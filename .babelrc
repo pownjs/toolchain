@@ -8,17 +8,14 @@
             "last 2 Chrome versions",
             "last 2 Firefox versions"
           ],
-          "node": "12.0.0"
+          "node": "13.0.0"
         },
         "useBuiltIns": "usage",
         "shippedProposals": true
       }
-    ],
-    "@babel/preset-typescript"
+    ]
   ],
   "plugins": [
-    "@babel/plugin-transform-runtime", ["@babel/plugin-proposal-decorators", { "legacy": true }],
-    "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-proposal-object-rest-spread"
+    "@babel/plugin-transform-runtime", ["@babel/plugin-proposal-decorators", { "legacy": true }]
   ]
 }
